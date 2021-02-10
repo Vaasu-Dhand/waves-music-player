@@ -23,6 +23,7 @@ export default function Player({ currentSong: { audio }, isPlaying, setIsPlaying
   }
 
   const timeUpdateHandler = (e: React.ChangeEvent<HTMLAudioElement>): void  => { 
+    
     const currentTime = e.target.currentTime
     const duration = e.target.duration
     setSongInfo({...songInfo, 
