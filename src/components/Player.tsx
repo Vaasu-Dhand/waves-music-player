@@ -2,16 +2,16 @@ import React, { useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faPause, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons'
 
-export default function Player({ currentSong: { audio }, isPlaying, setIsPlaying }) {
+export default function Player({ currentSong: { audio }, isPlaying, setIsPlaying }: PropTypes) {
   // Hooks
   const [songInfo, setSongInfo] = useState({
-    currentTime: 0,
+    currentTime: 0, 
     duration: 0
   })
   const audioRef = useRef(null);
 
   // Event Handlers
-  const playSongHandler = () => {
+  const playSongHandler = (): void => {
     // Play/Pause Music 
     if (isPlaying) {
       audioRef.current.pause()
@@ -22,7 +22,7 @@ export default function Player({ currentSong: { audio }, isPlaying, setIsPlaying
      } 
   }
 
-  const timeUpdateHandler = (e) => {
+  const timeUpdateHandler = (e: React.ChangeEvent<HTMLAudioElement>): void  => { 
     const currentTime = e.target.currentTime
     const duration = e.target.duration
     setSongInfo({...songInfo, 
@@ -31,17 +31,17 @@ export default function Player({ currentSong: { audio }, isPlaying, setIsPlaying
     })
   }
 
-  const dragHandler = (e) => {
+  const dragHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {  
     audioRef.current.currentTime = e.target.value
     setSongInfo({
       ...songInfo, 
-      currentTime: e.target.value
+      currentTime: Number.parseFloat(e.target.value)  // This was probably coming is as a string, converted it to Float
     })
   }
 
   // Utils
-  function formatTime(time) {
-    return Math.floor(time / 60) + ":" + ("0" + Math.floor(time % 60)).slice(-2)
+  function formatTime(time: number) {    
+    return Math.floor(time / 60) + ":" + ("0" + Math.floor(time % 60)).slice(-2);
   }
 
   return (
@@ -59,4 +59,12 @@ export default function Player({ currentSong: { audio }, isPlaying, setIsPlaying
       <audio ref={audioRef} src={audio} onTimeUpdate={timeUpdateHandler} onLoadedMetadata={timeUpdateHandler} ></audio>
     </div>
   )
+}
+
+interface PropTypes {
+  currentSong: {
+    audio: string
+  },
+  isPlaying: boolean,
+  setIsPlaying: React.Dispatch<React.SetStateAction<boolean>>
 }
