@@ -1,14 +1,17 @@
-import React, { useRef, useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { SongContext, RefContext } from '../context'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faPause, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons'
 
-export default function Player({ currentSong: { audio }, isPlaying, setIsPlaying }: PropTypes) {
+export default function Player() {
   // Hooks
   const [songInfo, setSongInfo] = useState({
     currentTime: 0, 
     duration: 0
   })
-  const audioRef = useRef(null);
+  const { currentSong: { audio }, isPlaying, setIsPlaying }: PlayerTypes = useContext(SongContext);
+
+  const audioRef = useContext(RefContext)
 
   // Event Handlers
   const playSongHandler = (): void => {
@@ -62,7 +65,7 @@ export default function Player({ currentSong: { audio }, isPlaying, setIsPlaying
   )
 }
 
-interface PropTypes {
+interface PlayerTypes {
   currentSong: {
     audio: string
   },

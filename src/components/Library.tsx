@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { SongContext } from '../context'
 import { LibrarySong } from './index';
 
-export default function Library({ songs, setCurrentSong }: PropTypes) {
+export default function Library() {
+
+  const { songs, setCurrentSong }: LibraryTypes = useContext(SongContext);
+
   return (
     <div className="library">
       <h2>Library</h2>
@@ -14,7 +18,7 @@ export default function Library({ songs, setCurrentSong }: PropTypes) {
   );
 }
 
-interface PropTypes {
+interface LibraryTypes {
   // Array of Songs
   songs: {
     name: string;

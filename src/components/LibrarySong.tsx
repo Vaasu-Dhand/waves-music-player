@@ -1,8 +1,17 @@
+import { useContext } from "react";
+import { RefContext } from '../context/RefContext'
+
 export default function LibrarySong({ song, setCurrentSong }: PropTypes) {
+
+  // Hooks
+  const audioRef = useContext(RefContext);
+  
+  console.log(audioRef);
+
   const songSelectHandler = () => {
-    console.log(song);
     // To Get the song that the user clicked on
     setCurrentSong(song);
+    audioRef.current.play()
   };
 
   return (
