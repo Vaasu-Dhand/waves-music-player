@@ -4,14 +4,14 @@ import { LibrarySong } from './index';
 
 export default function Library() {
 
-  const { songs, setCurrentSong }: LibraryTypes = useContext(SongContext);
+  const { songs }: LibraryTypes = useContext(SongContext);
 
   return (
     <div className="library">
       <h2>Library</h2>
       <div className="library-songs">
         {songs.map((song) => (
-          <LibrarySong key={song.id} song={song} setCurrentSong={setCurrentSong} />
+          <LibrarySong key={song.id} song={song} />
         ))}
       </div>
     </div>
