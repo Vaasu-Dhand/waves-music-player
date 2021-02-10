@@ -1,5 +1,5 @@
 import React, { useState, createContext } from 'react'
-import chillHop from '../utils/chillHop';
+import { chillHop } from '../utils';
 
 export const SongContext = createContext<any>(null);   // ? Not sure about the type
 

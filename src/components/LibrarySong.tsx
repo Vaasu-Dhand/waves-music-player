@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { SongContext, RefContext } from '../context';
+import { playAudio } from '../utils'
 
 export default function LibrarySong({ song }: PropTypes) {
   const { setCurrentSong, isPlaying, setActiveSong }: SongContextTypes = useContext(
@@ -11,23 +12,9 @@ export default function LibrarySong({ song }: PropTypes) {
 
   // Event Handlers
   const songSelectHandler = () => {
-    // To Get the song that the user clicked on
-    // console.log(song);
-
     setCurrentSong(song);
-    
-    // Code for Setting Active track
     setActiveSong(song.id)
-
-    if (isPlaying) {
-      // * I dont get this
-      const playPromise = audioRef.current.play();
-      if (playPromise !== undefined) {
-        playPromise.then(() => {
-          audioRef.current.play();
-        });
-      }
-    }
+    playAudio(isPlaying, audioRef)
   };
 
   return (

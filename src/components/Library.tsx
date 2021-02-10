@@ -1,13 +1,15 @@
 import React, { useContext } from 'react';
-import { SongContext } from '../context'
+import { SongContext, NavContext } from '../context'
 import { LibrarySong } from './index';
 
 export default function Library() {
 
+  // Hooks
   const { songs }: LibraryTypes = useContext(SongContext);
+  const { isLibraryVisible } = useContext(NavContext)
 
   return (
-    <div className="library">
+    <div className={`library ${isLibraryVisible ? 'active-library' : ''}`}>
       <h2>Library</h2>
       <div className="library-songs">
         {songs.map((song) => (
