@@ -1,10 +1,11 @@
 import React from 'react';
 import { Song, Player, Library, Nav } from './components/index';
 import './styles/app.scss';
-
 import { SongProvider, RefProvider, NavProvider } from './context';
 
+
 function App() {
+  
   return (
     <div className="App">
       <NavProvider>
@@ -22,3 +23,4 @@ function App() {
 }
 
 export default App;
+

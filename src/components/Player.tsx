@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { SongContext, RefContext } from '../context';
-import { playAudio } from '../utils'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faPlay,
@@ -8,16 +7,19 @@ import {
   faAngleLeft,
   faAngleRight,
 } from '@fortawesome/free-solid-svg-icons';
+import { playAudio } from '../utils'
 
 export default function Player() {
+
   // Hooks
   const [songInfo, setSongInfo] = useState({
     currentTime: 0,
     duration: 0,
+    animationPercentage: 0
   });
 
   const {
-    currentSong: { audio, id },
+    currentSong: { audio, id, color },
     isPlaying,
     setIsPlaying,
     songs,
@@ -47,7 +49,11 @@ export default function Player() {
   const timeUpdateHandler = (e: React.ChangeEvent<HTMLAudioElement>): void => {
     const currentTime = e.target.currentTime;
     const duration = e.target.duration;
-    setSongInfo({ ...songInfo, currentTime, duration });
+    // Calculate Duration % for Animation
+    const roundedCurrent = Math.round(currentTime)
+    const roundedDuration = Math.round(duration)
+    const animationPercentage = Math.round((roundedCurrent / roundedDuration) * 100)
+    setSongInfo({ ...songInfo, currentTime, duration, animationPercentage });
   };
 
   const dragHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -76,6 +82,12 @@ export default function Player() {
     playAudio(isPlaying, audioRef);
   };
 
+  const songEndHandler = async () => {
+    let currentIndex = songs.findIndex((song) => song.id === id);
+    await setCurrentSong(songs[(currentIndex + 1) % songs.length ]);
+    (isPlaying) && audioRef.current.play();
+  }
+
   // Utils
   function formatTime(time: number) {
     return (
@@ -87,6 +99,8 @@ export default function Player() {
     <div className="player">
       <div className="time-control">
         <p>{formatTime(songInfo.currentTime)}</p>
+        <div style={{background: `linear-gradient(to right, ${color[0]}, ${color[1]})`}} className="track">
+
         <input
           min={0}
           max={songInfo.duration || 0}
@@ -95,8 +109,10 @@ export default function Player() {
           type="range"
           name=""
           id=""
-        />
-        <p>{formatTime(songInfo.duration)}</p>
+          />
+          <div style={{ transform: `translateX(${songInfo.animationPercentage}%)` }} className="animate-track"></div>
+          </div>
+        <p>{songInfo.duration ? formatTime(songInfo.duration) : "0.00"}</p>
       </div>
       <div className="play-control">
         <FontAwesomeIcon
@@ -121,6 +137,7 @@ export default function Player() {
       <audio
         ref={audioRef}
         src={audio}
+        onEnded={songEndHandler}
         onTimeUpdate={timeUpdateHandler}
         onLoadedMetadata={timeUpdateHandler}
       ></audio>
@@ -132,6 +149,7 @@ interface PlayerTypes {
   currentSong: {
     audio: string;
     id: string;
+    color: string[]
   };
   isPlaying: boolean;
   setIsPlaying: React.Dispatch<React.SetStateAction<boolean>>;
@@ -155,5 +173,5 @@ interface PlayerTypes {
       active: boolean;
     }>
   >;
-  setActiveSong: Function
+  setActiveSong: any,
 }

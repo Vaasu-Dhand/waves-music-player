@@ -11,10 +11,10 @@ export default function LibrarySong({ song }: PropTypes) {
   const audioRef = useContext(RefContext);
 
   // Event Handlers
-  const songSelectHandler = () => {
+  const songSelectHandler = async () => {
     setCurrentSong(song);
     setActiveSong(song.id)
-    playAudio(isPlaying, audioRef)
+    playAudio(isPlaying, audioRef);
   };
 
   return (
@@ -55,6 +55,6 @@ interface SongContextTypes {
       active: boolean;
     }>
   >;
-  setActiveSong: Function;
+  setActiveSong: any;
   isPlaying: boolean;
 }
